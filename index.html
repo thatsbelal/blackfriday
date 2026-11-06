@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Free tool for fashion brand owners: find your maximum Black Friday discount and offers that stay profitable on delivered orders.">
+<meta property="og:title" content="Black Friday Offer Calculator">
+<meta property="og:description" content="Find your maximum Black Friday discount and offers that stay profitable on delivered orders. Free, by @thatsbelal.">
+<meta property="og:type" content="website">
+<title>Black Friday Offer Calculator · @thatsbelal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+body{margin:0}
+:root{
+  --paper:#F4F5F7; --card:#FCFCFD; --ink:#11161F; --muted:#586174; --line:#DADFE7; --field:#F7F8FA;
+  --tag:#C8283B; --tag-ink:#FFFFFF; --tag-soft:#F8E4E7;
+  --good:#1D7F55; --good-soft:#E2F2EA; --warn:#9A6400; --warn-soft:#FAF0DA; --bad:#C0262F; --bad-soft:#FAE3E4;
+  --focus:#2F5FD0; --panel:#11161F; --panel-ink:#F4F5F7; --panel-muted:#A9B1C1; --panel-line:#2A3242;
+  --display:"Instrument Serif",Georgia,serif;
+  --body:"Manrope","Segoe UI",Arial,system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#0E121A; --card:#161C27; --ink:#EEF1F6; --muted:#9BA5B8; --line:#283041; --field:#111722;
+    --tag:#E8495C; --tag-ink:#FFFFFF; --tag-soft:#3A1B21;
+    --good:#4CC38A; --good-soft:#132D1F; --warn:#E3A93B; --warn-soft:#30260F; --bad:#F06770; --bad-soft:#38191C;
+    --focus:#7FA3FF; --panel:#1B2230; --panel-ink:#EEF1F6; --panel-muted:#A9B1C1; --panel-line:#2E3747;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#0E121A; --card:#161C27; --ink:#EEF1F6; --muted:#9BA5B8; --line:#283041; --field:#111722;
+  --tag:#E8495C; --tag-ink:#FFFFFF; --tag-soft:#3A1B21;
+  --good:#4CC38A; --good-soft:#132D1F; --warn:#E3A93B; --warn-soft:#30260F; --bad:#F06770; --bad-soft:#38191C;
+  --focus:#7FA3FF; --panel:#1B2230; --panel-ink:#EEF1F6; --panel-muted:#A9B1C1; --panel-line:#2E3747;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55}
+.wrap{max-width:1200px;margin:0 auto;padding-inline:16px;padding-block:32px 56px}
+header{display:grid;gap:10px;margin-bottom:28px}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--tag)}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(40px,7vw,72px);line-height:1;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1 i{color:var(--tag)}
+.lede{margin:0;color:var(--muted);max-width:66ch;font-size:16px}
+.grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:24px;align-items:start}
+@media (max-width:940px){.grid{grid-template-columns:1fr}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+.step{display:grid;gap:12px;padding-bottom:18px;margin-bottom:18px;border-bottom:1px solid var(--line)}
+.step:last-of-type{border-bottom:0;margin-bottom:0;padding-bottom:0}
+.step h2{margin:0;font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;gap:10px;align-items:center}
+.step h2 .num{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--paper);font-size:11px;letter-spacing:0}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--field);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px;margin-bottom:18px;position:relative}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label{text-align:center;padding:10px 8px;border-radius:9px;font-weight:700;font-size:13.5px;cursor:pointer;color:var(--muted);line-height:1.25}
+.seg label small{display:block;font-weight:500;font-size:11.5px}
+.seg input:checked+label{background:var(--ink);color:var(--paper)}
+.seg input:focus-visible+label{outline:2px solid var(--focus);outline-offset:2px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.f{display:grid;gap:5px;min-width:0}
+.f label{font-size:13px;font-weight:600}
+.f small{font-size:11.5px;color:var(--muted);line-height:1.35}
+.inp{position:relative}
+.inp input,select{width:100%;font:600 14.5px/1.2 var(--body);font-variant-numeric:tabular-nums;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:10px;padding:10px 11px}
+select{appearance:auto;padding:9px 8px}
+.inp.u input{padding-right:44px}
+.inp .unit{position:absolute;right:11px;top:50%;transform:translateY(-50%);font-size:10.5px;font-weight:700;color:var(--muted);pointer-events:none}
+input:focus-visible,select:focus-visible,summary:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.rows{display:grid;gap:10px}
+.prow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 34px;gap:8px 10px;border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--card)}
+.prow .f label{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.prow .c-name{grid-column:1 / span 2}
+.prow .rm{grid-column:3;grid-row:1;align-self:end}
+.quick .prow .c-name{grid-column:1 / -1}
+.rowhint{grid-column:1 / -1;margin:0;font-size:12px;font-weight:600;color:var(--muted)}
+.rowhint.bad{color:var(--bad)}
+.quick .prow{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.role-fixed{display:flex;align-items:center;height:40px;padding:0 11px;border-radius:10px;border:1px dashed var(--line);font-size:13px;font-weight:700;color:var(--muted)}
+.rm{width:34px;height:40px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--muted);font:700 18px var(--body);cursor:pointer}
+.rm:disabled{opacity:.35;cursor:not-allowed}
+.add{justify-self:start;font:700 13.5px var(--body);background:transparent;color:var(--ink);border:1px dashed var(--muted);border-radius:10px;padding:9px 14px;cursor:pointer}
+.add:disabled{opacity:.4;cursor:not-allowed}
+.floor{display:grid;gap:6px}
+.floor-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.floor-head output{font-family:var(--display);font-size:30px;line-height:1;color:var(--tag)}
+input[type=range]{width:100%;accent-color:var(--tag);padding:0;background:none;border:0}
+details{border:1px dashed var(--line);border-radius:10px;padding:10px 12px}
+summary{cursor:pointer;font-size:13px;font-weight:600}
+details .pair{margin-top:10px}
+.note{font-size:12px;color:var(--muted);margin:0}
+
+.results{display:grid;gap:20px}
+.sum{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center}
+@media (max-width:560px){.sum{grid-template-columns:1fr}}
+.tag{position:relative;background:var(--tag);color:var(--tag-ink);width:210px;padding:22px 16px 18px 50px;clip-path:polygon(0 18%,20% 0,100% 0,100% 100%,20% 100%,0 82%);border-radius:8px;transform:rotate(-3deg)}
+.tag::before{content:"";position:absolute;left:11%;top:50%;width:11px;height:11px;border-radius:50%;background:var(--card);transform:translate(-50%,-50%)}
+.tag .lbl{display:block;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.92}
+.tag .big{display:block;font-family:var(--display);font-size:72px;line-height:.95;margin-top:6px;font-variant-numeric:tabular-nums}
+.tag .foot{display:block;font-size:11.5px;opacity:.92;margin-top:6px;line-height:1.3}
+.sum-copy{display:grid;gap:12px}
+.sum-copy p{margin:0;color:var(--muted)}
+.sum-copy p b{color:var(--ink)}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:560px){.kpis{grid-template-columns:1fr}}
+.kpi{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--field)}
+.kpi .k{font-size:11.5px;color:var(--muted);line-height:1.3}
+.kpi .v{font-size:19px;font-weight:800;font-variant-numeric:tabular-nums;margin-top:2px;line-height:1.2}
+.kpi .s{font-size:11.5px;color:var(--muted)}
+.sec-h{margin:0;font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.meters{display:grid;gap:18px;padding-top:14px}
+.mrow{display:grid;grid-template-columns:130px 1fr;gap:12px;align-items:center}
+@media (max-width:520px){.mrow{grid-template-columns:1fr;gap:18px}}
+.mname{font-size:13px;font-weight:700;line-height:1.25;overflow-wrap:anywhere}
+.mname small{display:block;font-weight:500;color:var(--muted);font-size:11.5px}
+.bar{position:relative;height:14px;border-radius:999px;background:var(--bad-soft);display:flex}
+.bar .z{height:100%}
+.bar .z.g{background:var(--good);border-radius:999px 0 0 999px}
+.bar .z.w{background:var(--warn)}
+.mk{position:absolute;top:-5px;bottom:-5px;width:2px;background:var(--ink)}
+.mval{position:absolute;top:-19px;font-size:11px;font-weight:700;color:var(--muted);transform:translateX(-50%);white-space:nowrap}
+.scale-row{display:grid;grid-template-columns:130px 1fr;gap:12px}
+@media (max-width:520px){.scale-row{grid-template-columns:1fr}.scale-row>span:first-child{display:none}}
+.scale{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.legend .mkk{width:2px;height:12px;background:var(--ink);border-radius:0}
+
+#offerList{display:grid;gap:12px}
+.offers{display:grid;gap:12px}
+.offer{display:grid;gap:10px;border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:var(--card)}
+.offer.rec{border:2px solid var(--tag);box-shadow:0 0 0 4px var(--tag-soft)}
+.o-top{display:grid;gap:8px}
+.o-kind{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.o-head{font-family:var(--display);font-size:30px;line-height:1.08;margin-top:2px}
+.o-sub{font-size:13px;color:var(--muted);margin-top:4px}
+.pills{display:flex;gap:6px;flex-wrap:wrap}
+.pill{font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:999px;white-space:nowrap}
+.p-good{background:var(--good-soft);color:var(--good)}
+.p-warn{background:var(--warn-soft);color:var(--warn)}
+.p-bad{background:var(--bad-soft);color:var(--bad)}
+.p-rec{background:var(--tag);color:var(--tag-ink)}
+.p-mute{background:var(--field);color:var(--muted);border:1px solid var(--line)}
+.o-nums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;border-top:1px solid var(--line);padding-top:10px}
+@media (max-width:480px){.o-nums{grid-template-columns:1fr 1fr}}
+.o-nums div{display:grid;gap:1px;min-width:0}
+.o-nums .k{font-size:11px;color:var(--muted)}
+.o-nums .v{font-size:15px;font-weight:800;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+table{width:100%;border-collapse:collapse;min-width:640px;font-size:13.5px}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--field)}
+tr:last-child td{border-bottom:0}
+td.n{font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+td small{display:block;color:var(--muted);font-size:11.5px}
+.full-only{display:grid;gap:12px}
+
+.plan{background:var(--panel);color:var(--panel-ink);border-radius:16px;padding:22px;display:grid;gap:14px}
+.plan .sec-h{color:var(--panel-muted)}
+.plan-title{font-family:var(--display);font-size:36px;line-height:1.05;margin:0;overflow-wrap:anywhere}
+.plan ol{margin:0;padding:0;list-style:none;display:grid}
+.plan li{display:grid;grid-template-columns:160px 1fr;gap:14px;padding:11px 0;border-top:1px solid var(--panel-line)}
+@media (max-width:520px){.plan li{grid-template-columns:1fr;gap:2px}}
+.plan li .k{font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#FF8A98;overflow-wrap:anywhere}
+.plan li .v{font-size:15px;line-height:1.45}
+.plan-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.plan-foot p{margin:0;font-size:12.5px;color:var(--panel-muted)}
+button.copy{font:700 14px var(--body);background:var(--tag);color:var(--tag-ink);border:0;border-radius:10px;padding:11px 16px;cursor:pointer}
+textarea.fallback{width:100%;min-height:160px;font:13px/1.5 var(--body);border-radius:10px;padding:10px;background:var(--panel);color:var(--panel-ink);border:1px solid var(--panel-line)}
+.warnbox{background:var(--bad-soft);color:var(--bad);border-radius:12px;padding:12px 14px;font-weight:700}
+.warnbox span{display:block;color:var(--ink);font-weight:400;font-size:14px;margin-top:2px}
+.cta{margin-top:24px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;border:1px solid var(--line);background:var(--card);border-radius:16px;padding:20px 22px}
+.cta b{display:block;font-family:var(--display);font-weight:400;font-size:30px;line-height:1.1}
+.cta p{margin:0;color:var(--muted);max-width:60ch}
+.cta .kw{font-weight:800;border:2px dashed var(--tag);color:var(--tag);border-radius:10px;padding:8px 14px;white-space:nowrap}
+footer{margin-top:16px;color:var(--muted);font-size:12px;max-width:92ch}
+@media (prefers-reduced-motion:reduce){.tag{transform:none}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Free tool · Black Friday 2026 · by @thatsbelal</div>
+    <h1>Black Friday, <i>without</i> giving your margin away</h1>
+    <p class="lede">Enter your products and a few costs. You get the maximum discount for each product, offers checked against your real profit on <b>delivered</b> orders, and a plan you can copy. The numbers below are an example winter brand. Replace them with yours.</p>
+  </header>
+
+  <div class="grid">
+    <form class="panel" id="f" autocomplete="off" novalidate>
+      <div class="seg" role="radiogroup" aria-label="Calculator mode">
+        <input type="radio" name="mode" id="mQuick" value="quick" checked><label for="mQuick">Quick<small>One product + one add-on</small></label>
+        <input type="radio" name="mode" id="mFull" value="full"><label for="mFull">Full catalogue<small>Up to 8 products</small></label>
+      </div>
+
+      <div class="step">
+        <h2><span class="num">1</span>Your brand</h2>
+        <div class="f"><label for="brand">Brand name</label><div class="inp"><input id="brand" type="text" value="Your brand" maxlength="40"></div></div>
+      </div>
+
+      <div class="step" id="prodStep">
+        <h2><span class="num">2</span>Products</h2>
+                <div class="rows" id="rows"></div>
+        <button type="button" class="add" id="addBtn">+ Add product</button>
+        <p class="note" id="roleNote">Add your main pieces and your cheap accessories. Anything priced well below the rest is used automatically as a gift or bundle add-on.</p>
+      </div>
+
+      <div class="step">
+        <h2><span class="num">3</span>Costs per order</h2>
+        <div class="pair">
+          <div class="f"><label for="ship">Shipping &amp; packaging</label><div class="inp u"><input id="ship" type="number" inputmode="decimal" min="0" value="60"><span class="unit">EGP</span></div><small>What you pay per order</small></div>
+          <div class="f"><label for="cpa">Ad cost per order</label><div class="inp u"><input id="cpa" type="number" inputmode="decimal" min="0" value="150"><span class="unit">EGP</span></div><small>Your CPA in Ads Manager</small></div>
+        </div>
+        <div class="pair">
+          <div class="f"><label for="dr">Delivery rate</label><div class="inp u"><input id="dr" type="number" inputmode="decimal" min="1" max="100" value="82"><span class="unit">%</span></div><small>Of 100 orders, how many get delivered and paid</small></div>
+          <div class="f"><label for="comp">Market's headline discount</label><div class="inp u"><input id="comp" type="number" inputmode="decimal" min="0" max="90" value="30"><span class="unit">%</span></div><small>What competitors in your category shout</small></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <h2><span class="num">4</span>Your rule</h2>
+        <div class="floor">
+          <div class="floor-head"><label for="floor"><b>Lowest profit you'll accept per piece</b></label><output id="floorOut" for="floor">50%</output></div>
+          <input id="floor" type="range" min="30" max="100" step="5" value="50">
+          <p class="note">As a share of what each piece earns on a normal day. 50% means you're willing to sell up to twice as much for the same profit.</p>
+        </div>
+        <details>
+          <summary>Black Friday week assumptions</summary>
+          <div class="pair">
+            <div class="f"><label for="cpach">Ad cost change</label><div class="inp u"><input id="cpach" type="number" inputmode="decimal" min="-80" max="200" value="-20"><span class="unit">%</span></div><small>CPMs rise, but buyers convert faster</small></div>
+            <div class="f"><label for="drop">Delivery rate drop</label><div class="inp u"><input id="drop" type="number" inputmode="decimal" min="0" max="50" value="7"><span class="unit">pts</span></div><small>Impulse COD orders get refused more</small></div>
+          </div>
+        </details>
+      </div>
+    </form>
+
+    <section class="results" aria-live="polite">
+      <div class="panel" style="display:grid;gap:18px">
+        <div class="sum">
+          <div class="tag" role="img" aria-label="Maximum discount">
+            <span class="lbl" id="tagLbl">Your ceiling</span>
+            <span class="big" id="ceil">—</span>
+            <span class="foot" id="tagFoot"></span>
+          </div>
+          <div class="sum-copy">
+            <p id="sumTxt"></p>
+            <div class="kpis">
+              <div class="kpi"><div class="k" id="k1k">Profit per delivered order today</div><div class="v" id="k1">—</div><div class="s" id="k1s"></div></div>
+              <div class="kpi"><div class="k">Safe straight discount</div><div class="v" id="k2">—</div><div class="s" id="k2s"></div></div>
+              <div class="kpi"><div class="k">Ad cost per delivered order, BF week</div><div class="v" id="k3">—</div></div>
+            </div>
+          </div>
+        </div>
+        <div id="warn" hidden class="warnbox"></div>
+        <div style="display:grid;gap:12px">
+          <h3 class="sec-h">Discount meter</h3>
+          <div class="meters" id="meters"></div>
+          <div class="scale-row"><span></span><div class="scale"><span>0%</span><span>15%</span><span>30%</span><span>45%</span><span>60%</span></div></div>
+          <div class="legend"><span><i style="background:var(--good)"></i>Safe</span><span><i style="background:var(--warn)"></i>Thin margin</span><span><i style="background:var(--bad-soft);border:1px solid var(--bad)"></i>Loses money</span><span><i class="mkk"></i>Market headline</span></div>
+        </div>
+      </div>
+
+      <div class="offers">
+        <h3 class="sec-h" id="offersTitle">Offers, checked against your numbers</h3>
+        <div id="offerList"></div>
+      </div>
+
+      <div class="full-only" id="tableBlock" hidden>
+        <h3 class="sec-h">Product by product</h3>
+        <div class="tbl-wrap"><table id="ptable"></table></div>
+      </div>
+
+      <div class="plan">
+        <h3 class="sec-h">Your Black Friday plan</h3>
+        <p class="plan-title" id="planTitle">Your brand</p>
+        <ol id="planList"></ol>
+        <div class="plan-foot">
+          <p>Copy it and send it to your team or your media buyer.</p>
+          <button type="button" class="copy" id="copyBtn">Copy plan</button>
+        </div>
+        <textarea class="fallback" id="fallback" hidden readonly aria-label="Plan text to copy"></textarea>
+      </div>
+    </section>
+  </div>
+
+  <div class="cta">
+    <p><b>Want this done properly on your brand?</b>The Profit Audit runs these numbers on your real sales, returns and ad data, before you commit to winter quantities and Black Friday offers.</p>
+    <span class="kw">DM “AUDIT” to @thatsbelal</span>
+  </div>
+  <footer>Estimates from the numbers you enter. Profit is per delivered order, after product cost, shipping, packaging and ad cost, and before fixed costs like rent and salaries. Ad cost is assumed per order whatever its size; multi-piece offers usually convert a little lower, so treat their results as best case. Every main piece in an order must earn your floor; cheap add-ons don't count toward it. Mix-and-match offers are checked against the worst combination of your products.</footer>
+</div>
+
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  const MAX=8;
+  let uid=0;
+  const P=(name,price,cost)=>({id:++uid,name,price:String(price),cost:String(cost)});
+  const state={mode:"quick",products:[
+    P("Hoodie",1000,400),
+    P("Beanie",250,80),
+    P("Sweatpants",850,340),
+    P("Puffer jacket",1800,990),
+    P("Scarf",300,90)
+  ]};
+
+  const num=v=>{const x=parseFloat(v);return isFinite(x)?x:0};
+  const n=id=>num($(id).value);
+  const egp=v=>(v<0?"−":"")+Math.abs(Math.round(v)).toLocaleString("en-US")+" EGP";
+  const pc=v=>Math.round(v)+"%";
+  const xf=v=>(Math.round(v*100)/100).toFixed(2).replace(/\.?0+$/,"")+"×";
+  const down5=v=>Math.floor(v/5)*5;
+  const nice=v=>Math.ceil(v/50)*50-1;
+  const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const nm=p=>(p.name||"").trim()||"Product";
+  const fl=v=>pc(Math.max(0,Math.floor(v)));
+
+  /* ---------- product editor ---------- */
+  // cheap pieces (≤ 40% of the typical price) are used automatically as gift & bundle add-ons
+  function addonIds(){
+    const pr=state.products.map(p=>num(p.price)).filter(v=>v>0).sort((a,b)=>a-b);
+    if(pr.length<2) return new Set();
+    const ref=pr.length>=3?pr[Math.floor((pr.length-1)/2)+((pr.length-1)%2?1:0)]:pr[pr.length-1];
+    const th=0.4*ref;
+    return new Set(state.products.filter(p=>{const v=num(p.price);return v>0&&v<=th;}).map(p=>p.id));
+  }
+  function quickPicks(){ return {main:state.products[0], addon:state.products[1]||null}; }
+  function rowHTML(p,quick,label){
+    const pid=p.id, canRemove=state.products.length>1;
+    return '<div class="prow">'
+      +'<div class="f c-name"><label for="name-'+pid+'">'+esc(label)+'</label><div class="inp"><input type="text" id="name-'+pid+'" data-id="'+pid+'" data-k="name" value="'+esc(p.name)+'" maxlength="28"></div></div>'
+      +(quick?'':'<button type="button" class="rm" data-rm="'+pid+'" aria-label="Remove '+esc(nm(p))+'"'+(canRemove?'':' disabled')+'>×</button>')
+      +'<div class="f"><label for="price-'+pid+'">Price</label><div class="inp u"><input type="number" id="price-'+pid+'" inputmode="decimal" min="0" data-id="'+pid+'" data-k="price" value="'+esc(p.price)+'"><span class="unit">EGP</span></div></div>'
+      +'<div class="f"><label for="cost-'+pid+'">Cost to make</label><div class="inp u"><input type="number" id="cost-'+pid+'" inputmode="decimal" min="0" data-id="'+pid+'" data-k="cost" value="'+esc(p.cost)+'"><span class="unit">EGP</span></div></div>'
+      +(quick?'':'<p class="rowhint" id="hint-'+pid+'" hidden></p>')
+      +'</div>';
+  }
+  function renderRows(){
+    const quick=state.mode==="quick";
+    $("prodStep").classList.toggle("quick",quick);
+    let html="";
+    if(quick){
+      const {main,addon}=quickPicks();
+      html+=rowHTML(main,true,"Best-seller");
+      if(addon) html+=rowHTML(addon,true,"Cheap add-on (beanie, scarf…)");
+    } else state.products.forEach((p,i)=>html+=rowHTML(p,false,"Product "+(i+1)));
+    $("rows").innerHTML=html;
+    $("addBtn").hidden=quick;
+    $("addBtn").disabled=state.products.length>=MAX;
+    $("addBtn").textContent=state.products.length>=MAX?"Maximum 8 products":"+ Add product";
+    $("roleNote").hidden=quick;
+  }
+  $("rows").addEventListener("input",e=>{
+    const el=e.target, id=+el.dataset.id, k=el.dataset.k; if(!id||!k) return;
+    const p=state.products.find(q=>q.id===id); if(!p) return;
+    p[k]=el.value; compute();
+  });
+  $("rows").addEventListener("click",e=>{
+    const b=e.target.closest("[data-rm]"); if(!b) return;
+    const id=+b.dataset.rm; if(state.products.length<=1) return;
+    state.products=state.products.filter(p=>p.id!==id); renderRows(); compute();
+  });
+  $("addBtn").addEventListener("click",()=>{
+    if(state.products.length>=MAX) return;
+    const p=P("New product","",""); state.products.push(p); renderRows(); compute();
+    const el=$("name-"+p.id); if(el){el.focus(); el.select();}
+  });
+  document.querySelectorAll('input[name=mode]').forEach(r=>r.addEventListener("change",()=>{state.mode=r.value; renderRows(); compute();}));
+
+  /* ---------- model ---------- */
+  function globals(){
+    const S=n("ship"),A=n("cpa");
+    const d=Math.min(100,Math.max(1,n("dr")))/100;
+    const db=Math.min(1,Math.max(.01,d-n("drop")/100));
+    const Ab=Math.max(0,A*(1+n("cpach")/100));
+    return {S,adN:A/d,adB:Ab/db,f:n("floor")/100,comp:n("comp"),brand:($("brand").value.trim()||"Your brand")};
+  }
+  function stat(p,g){
+    const Pr=num(p.price),C=num(p.cost);
+    const base=Pr-C-g.S-g.adN, F=g.f*Math.max(base,0);
+    return {name:nm(p),P:Pr,C,base,F,ceil:Pr>0?(Pr-C-g.S-g.adB)/Pr*100:0,safe:Pr>0?(Pr-C-g.S-g.adB-F)/Pr*100:0};
+  }
+  function finish(o){ o.status=o.profit<=0?"loss":(o.profit+0.5<o.floor?"below":"ok"); return o; }
+  const score=o=>o.appeal+(o.id==="pct"?-6:0);
+  function pickBest(list){
+    const ok=list.filter(o=>o.status==="ok").sort((a,b)=>b.appeal-a.appeal);
+    return ok[0]||list.slice().sort((a,b)=>(b.profit-b.floor)-(a.profit-a.floor))[0];
+  }
+  function leadAndSecond(list){
+    const pass=list.filter(o=>!o.hide&&o.status==="ok");
+    const multi=pass.filter(o=>!o.single).sort((a,b)=>score(b)-score(a));
+    const single=pass.filter(o=>o.single).sort((a,b)=>score(b)-score(a));
+    const lead=multi[0]||single[0]||null;
+    const second=lead&&!lead.single?(single[0]||null):(single[1]||multi[0]||null);
+    return {lead,second};
+  }
+
+  function productOffers(s,addons,g){
+    const out=[], {P:Pr,C,base,F,name}=s;
+    const X=Math.max(5,down5(s.safe));
+    out.push(finish({id:"pct",kind:"Discount",single:true,head:`${X}% off ${name}`,sub:"The offer everyone runs. Easy to copy, easy to beat.",appeal:X,eff:X,profit:Pr*(1-X/100)-C-g.S-g.adB,floor:F}));
+    if(addons.length){
+      out.push(pickBest(addons.map(a=>{const Pa=num(a.price),Ca=num(a.cost),sh=Pr+Pa>0?Pa/(Pr+Pa)*100:0;
+        return finish({id:"gift",kind:"Free gift",single:true,head:`Free ${nm(a)} with every ${name}`,sub:`A ${egp(Pa)} gift that costs you ${egp(Ca)}. No price cut on the ${name}.`,appeal:sh,eff:sh,profit:Pr-C-Ca-g.S-g.adB,floor:F});})));
+      const sets=addons.map(a=>{const Pa=num(a.price),Ca=num(a.cost);const B=Math.max(nice(C+Ca+g.S+g.adB+Math.max(base,0)),Math.ceil(Pr/50)*50-1);const sv=Pr+Pa>0?Math.max(0,(1-B/(Pr+Pa))*100):0;
+        return finish({id:"set",kind:"Bundle",single:true,head:`${name} + ${nm(a)} set for ${B.toLocaleString("en-US")} EGP`,sub:`Saves ${pc(sv)} vs buying both. Priced so you still earn a normal day's profit per order.`,appeal:sv,eff:sv,profit:B-C-Ca-g.S-g.adB,floor:F,hide:sv<3});}).filter(o=>!o.hide);
+      if(sets.length) out.push(pickBest(sets));
+    }
+    const y=Pr>0?(2*Pr-2*C-g.S-g.adB-2*F)/Pr*100:0, Y=Math.min(50,Math.max(10,down5(y)));
+    out.push(finish({id:"second",kind:"Multi-buy",single:false,head:`2nd ${name} ${Y}% off`,sub:`Shipping and ad cost are paid once, so a two-piece order can carry a bigger headline. Real discount on the order: ${pc(Y/2)}.`,appeal:Y,eff:Y/2,profit:2*Pr-Pr*Y/100-2*C-g.S-g.adB,floor:2*F}));
+    out.push(finish({id:"three",kind:"Multi-buy",single:false,head:`3 for 2 on every ${name}`,sub:"Feels like a free piece. Real discount on the order: 33%. Moves stock fastest.",appeal:33.3,eff:33.3,profit:2*Pr-3*C-g.S-g.adB,floor:3*F}));
+    out.forEach(o=>o.orders=o.profit>0&&base>0?base/o.profit:null);
+    return out;
+  }
+
+  function catalogueOffers(H,addons,g,excl){
+    excl=excl||[]; const leave=excl.length?" Leave out "+excl.join(", ")+".":"";
+    const out=[]; if(!H.length) return out;
+    const many=H.length>1, label=H[0].name;
+    // straight discount
+    const X=Math.max(5,down5(Math.min(...H.map(s=>s.safe))));
+    let w=null; H.forEach(s=>{const pr=s.P*(1-X/100)-s.C-g.S-g.adB, sl=pr-s.F; if(!w||sl<w.sl) w={s,pr,sl};});
+    out.push(finish({id:"pct",kind:"Discount",single:true,head:many?(excl.length?`${X}% off selected pieces`:`${X}% off everything`):`${X}% off ${label}`,sub:"The offer everyone runs. Its safe level is set by your thinnest-margin product."+leave,appeal:X,eff:X,profit:w.pr,floor:w.s.F,limit:w.s.name}));
+    // mix & match: 2nd piece off (lower-priced one)
+    const pairs=[]; H.forEach(a=>H.forEach(b=>{const i=a.P>=b.P?a:b, j=a.P>=b.P?b:a; if(j.P>0) pairs.push([i,j]);}));
+    if(pairs.length){
+      const ym=Math.min(...pairs.map(([i,j])=>(i.P+j.P-i.C-j.C-g.S-g.adB-i.F-j.F)/j.P*100));
+      const Y=Math.min(50,Math.max(10,down5(ym)));
+      let ww=null; pairs.forEach(([i,j])=>{const pr=i.P+j.P*(1-Y/100)-i.C-j.C-g.S-g.adB, sl=pr-i.F-j.F; if(!ww||sl<ww.sl) ww={pr,sl,fl:i.F+j.F,i,j};});
+      out.push(finish({id:"second",kind:"Multi-buy",single:false,head:many?`Any 2 pieces, 2nd at ${Y}% off`:`2nd ${label} ${Y}% off`,sub:(many?`The discount applies to the lower-priced piece. Real discount on the order: up to ${pc(Y/2)}.`:`Real discount on the order: ${pc(Y/2)}.`)+leave,appeal:Y,eff:Y/2,profit:ww.pr,floor:ww.fl,limit:ww.i===ww.j?ww.i.name+" × 2":ww.i.name+" + "+ww.j.name}));
+    }
+    // 3 for 2, cheapest free
+    let wt=null;
+    H.forEach(a=>H.forEach(b=>H.forEach(c=>{const pr=a.P+b.P+c.P-Math.min(a.P,b.P,c.P)-a.C-b.C-c.C-g.S-g.adB, f3=a.F+b.F+c.F, sl=pr-f3; if(!wt||sl<wt.sl) wt={pr,fl:f3,sl,t:[a,b,c]};})));
+    const tn=wt.t.map(s=>s.name), uq=[...new Set(tn)];
+    out.push(finish({id:"three",kind:"Multi-buy",single:false,head:many?"Buy 3, cheapest one free":`3 for 2 on every ${label}`,sub:(many?"Feels like a free piece and moves stock fastest.":"Feels like a free piece. Real discount on the order: 33%.")+leave,appeal:33.3,eff:many?Math.round(wt.t.reduce((m,s)=>Math.min(m,s.P),Infinity)/wt.t.reduce((a,s)=>a+s.P,0)*100):33.3,profit:wt.pr,floor:wt.fl,limit:uq.length===1?uq[0]+" × 3":tn.join(" + ")}));
+    // best pair set
+    if(H.length>1){
+      let best=null;
+      for(let i=0;i<H.length;i++)for(let j=i+1;j<H.length;j++){const a=H[i],b=H[j];const T=nice(a.C+b.C+g.S+g.adB+a.F+b.F);const sv=a.P+b.P>0?(1-T/(a.P+b.P))*100:0;if(!best||sv>best.sv)best={a,b,T,sv};}
+      if(best&&best.sv>=3) out.push(finish({id:"set",kind:"Bundle",single:false,head:`${best.a.name} + ${best.b.name} set for ${best.T.toLocaleString("en-US")} EGP`,sub:`Saves ${pc(best.sv)} vs buying both. Each piece still earns your floor.`,appeal:best.sv,eff:best.sv,profit:best.T-best.a.C-best.b.C-g.S-g.adB,floor:best.a.F+best.b.F,limit:"Your best-value pair"}));
+    }
+    // free add-on with every order
+    if(addons.length){
+      const avgP=H.reduce((s,h)=>s+h.P,0)/H.length;
+      out.push(pickBest(addons.map(a=>{const Pa=num(a.price),Ca=num(a.cost);let ws=null;H.forEach(s=>{const pr=s.P-s.C-Ca-g.S-g.adB, sl=pr-s.F; if(!ws||sl<ws.sl) ws={s,pr,sl};});const sh=avgP+Pa>0?Pa/(avgP+Pa)*100:0;
+        return finish({id:"gift",kind:"Free gift",single:true,head:many?`Free ${nm(a)} with every order`:`Free ${nm(a)} with every ${label}`,sub:`A ${egp(Pa)} gift that costs you ${egp(Ca)}. No price cut.`,appeal:sh,eff:sh,profit:ws.pr,floor:ws.s.F,limit:ws.s.name});})));
+    }
+    out.forEach(o=>o.excl=excl);
+    return out;
+  }
+
+  /* ---------- render ---------- */
+  function meterRow(s,g,sub){
+    const cap=60, sf=Math.max(0,Math.min(cap,s.safe)), c=Math.max(sf,Math.min(cap,s.ceil)), m=Math.min(cap,Math.max(0,g.comp));
+    return '<div class="mrow"><div class="mname">'+esc(s.name)+(sub?'<small>'+esc(sub)+'</small>':'')+'</div>'
+      +'<div class="bar"><div class="z g" style="width:'+(sf/cap*100)+'%"></div><div class="z w" style="width:'+((c-sf)/cap*100)+'%"></div>'
+      +'<div class="mk" style="left:'+(m/cap*100)+'%"></div>'
+      +'<span class="mval" style="left:'+(Math.max(0,Math.min(cap,s.ceil))/cap*100)+'%">ceiling '+fl(s.ceil)+'</span></div></div>';
+  }
+  function card(o,badge,full,comp){
+    const st=o.status==="ok"?'<span class="pill p-good">Clears your floor</span>':o.status==="below"?'<span class="pill p-warn">Below your floor</span>':'<span class="pill p-bad">Loses money</span>';
+    const mkt=o.appeal>=comp?'<span class="pill p-good">Beats the market</span>':'<span class="pill p-mute">Below market headline</span>';
+    const third=full
+      ? '<div><span class="k">Worst case</span><span class="v">'+esc(o.limit||"—")+'</span></div>'
+      : '<div><span class="k">Orders to match a normal day</span><span class="v">'+(o.orders?esc(xf(o.orders)):"never")+'</span></div>';
+    return '<article class="offer'+(badge==="Lead offer"?' rec':'')+'">'
+      +'<div class="o-top"><div><div class="o-kind">'+esc(o.kind)+'</div><div class="o-head">'+esc(o.head)+'</div><div class="o-sub">'+esc(o.sub)+'</div></div>'
+      +'<div class="pills">'+(badge?'<span class="pill p-rec">'+esc(badge)+'</span>':'')+st+mkt+'</div></div>'
+      +'<div class="o-nums"><div><span class="k">'+(full?"Lowest profit per order":"Your profit per order")+'</span><span class="v">'+esc(egp(o.profit))+'</span></div>'
+      +'<div><span class="k">Real discount on the order</span><span class="v">'+esc(pc(o.eff))+'</span></div>'+third+'</div></article>';
+  }
+  function sumText(safe,comp,ok){
+    if(!ok) return "Your ceiling is the deepest cut before an order turns into a loss.";
+    const s=Math.max(0,safe);
+    return "Your ceiling is <b>a wall, not a target</b>. The closer you get, the harder you work to earn less. Within your rule, a straight discount can go to <b>"+pc(s)+"</b>"+(comp>s?", below the market's "+pc(comp)+". The offers below get you a bigger headline without the loss.":", in line with the market's "+pc(comp)+".");
+  }
+
+  function compute(){
+    const g=globals();
+    $("floorOut").textContent=pc(g.f*100);
+    $("k3").textContent=egp(g.adB);
+    const warn=$("warn"); warn.hidden=true;
+    let rows=[];
+
+    if(state.mode==="quick"){
+      const {main,addon}=quickPicks();
+      const s=stat(main,g);
+      const offers=productOffers(s,addon?[addon]:[],g);
+      const {lead,second}=leadAndSecond(offers);
+      $("tagLbl").textContent="Your ceiling";
+      $("tagFoot").textContent="Past this, a single "+s.name+" order loses money";
+      $("ceil").textContent=fl(s.ceil);
+      $("k1k").textContent="Profit per delivered order today";
+      $("k1").textContent=egp(s.base); $("k1s").textContent=s.name;
+      $("k2").textContent=s.base>0&&s.safe>=5?"up to "+pc(down5(s.safe)):"none"; $("k2s").textContent="within your rule";
+      $("meters").innerHTML=meterRow(s,g,"");
+      if(s.base<=0){warn.hidden=false;warn.innerHTML=esc(s.name)+" loses money before any discount.<span>At "+esc(egp(s.base))+" per delivered order, fix price, product cost or ad cost before planning Black Friday.</span>";}
+      $("sumTxt").innerHTML=sumText(s.base>0?down5(s.safe):0,g.comp,s.base>0);
+      $("offersTitle").textContent="Offers for your "+s.name+", checked against your numbers";
+      $("offerList").innerHTML=offers.map(o=>card(o,lead&&o===lead?"Lead offer":second&&o===second?"Single-piece offer":"",false,g.comp)).join("");
+      $("tableBlock").hidden=true;
+      if(lead){rows.push(["Lead offer",lead.head+" ("+egp(lead.profit)+" profit per order)"]); if(second) rows.push([lead.single?"Backup offer":"Single-piece offer",second.head]);}
+      else rows.push(["Lead offer","No offer clears your floor. Run full price and push your best creative, or lower your floor."]);
+      rows.push(["Hard ceiling","Never more than "+fl(s.ceil)+" off a single "+s.name]);
+      rows.push(["Keep full price","Premium and high-margin pieces stay out of the offer"]);
+    } else {
+      const add=addonIds();
+      const all=state.products.map(p=>({p,s:stat(p,g),add:add.has(p.id)}));
+      const mains=all.filter(x=>!x.add);
+      const addons=all.filter(x=>x.add).map(x=>x.p);
+      const losers=mains.filter(x=>x.s.base<=0).map(x=>x.s);
+      const thin=mains.filter(x=>x.s.base>0&&x.s.safe<10).map(x=>x.s);
+      const E=mains.filter(x=>x.s.base>0&&x.s.safe>=10).map(x=>x.s);
+      const out=losers.concat(thin);
+      // row hints
+      all.forEach(x=>{const h=$("hint-"+x.p.id); if(!h) return;
+        let t=x.add?"Used as a gift and bundle piece":x.s.base<=0?"Loses money before any discount, kept out of offers":x.s.safe<10?"Margin too thin to discount, kept at full price":"";
+        h.textContent=t; h.hidden=!t; h.className="rowhint"+(x.add?"":" bad");});
+      if(!E.length){ warn.hidden=false; warn.innerHTML="None of your products can carry an offer within your rule.<span>Lower your floor, or fix price, product cost or ad cost.</span>"; }
+      else if(losers.length){ warn.hidden=false; warn.innerHTML="Losing money before any discount: "+esc(losers.map(s=>s.name).join(", "))+".<span>Fix price, product cost or ad cost for these first. They are kept out of every offer.</span>"; }
+      // try the full range first; leave out the thinnest-margin pieces only if that buys a clearly better offer
+      const sorted=E.slice().sort((a,b)=>b.safe-a.safe), best={}, order=[];
+      for(let k=sorted.length;k>=Math.max(1,Math.ceil(sorted.length/2));k--){
+        const excl=out.concat(sorted.slice(k)).map(s=>s.name);
+        catalogueOffers(sorted.slice(0,k),addons,g,excl).forEach(o=>{
+          if(!order.includes(o.id)) order.push(o.id);
+          const cur=best[o.id];
+          const better=!cur||(cur.status!=="ok"&&o.status==="ok")||(o.status==="ok"&&cur.status==="ok"&&o.appeal>=cur.appeal+5);
+          if(better) best[o.id]=o;
+        });
+      }
+      const offers=order.map(id=>best[id]);
+      const {lead,second}=leadAndSecond(offers);
+      const lim=E.length?E.reduce((a,b)=>a.ceil<=b.ceil?a:b):null;
+      const limS=E.length?E.reduce((a,b)=>a.safe<=b.safe?a:b):null;
+      $("tagLbl").textContent="Catalogue ceiling";
+      $("ceil").textContent=lim?fl(lim.ceil):"—";
+      $("tagFoot").textContent=lim?"Set by "+lim.name+", your thinnest-margin product":"No product can carry a discount";
+      $("k1k").textContent="Average profit per order today";
+      $("k1").textContent=E.length?egp(E.reduce((a,s)=>a+s.base,0)/E.length):"—";
+      $("k1s").textContent=E.length+" product"+(E.length===1?"":"s")+" in offers";
+      $("k2").textContent=limS&&limS.safe>=5?"up to "+pc(down5(limS.safe)):"none"; $("k2s").textContent=limS?"limited by "+limS.name:"";
+      $("meters").innerHTML=mains.map(x=>meterRow(x.s,g,out.includes(x.s)?"Full price":"")).join("")||'<p class="note">Add a product to see its meter.</p>';
+      $("sumTxt").innerHTML=sumText(limS?down5(limS.safe):0,g.comp,!!limS);
+      $("offersTitle").textContent="Catalogue offers, checked against your worst case";
+      $("offerList").innerHTML=offers.length?offers.map(o=>card(o,lead&&o===lead?"Lead offer":second&&o===second?"Second offer":"",true,g.comp)).join(""):'<p class="note">No product can carry an offer yet.</p>';
+
+      let t='<tr><th>Product</th><th>Ceiling</th><th>Recommended</th><th>Profit / order</th><th>Orders vs normal</th></tr>';
+      const planRows=[];
+      all.forEach(({p,s,add})=>{
+        if(add){ t+='<tr><td>'+esc(s.name)+'<small>Gift &amp; bundle piece</small></td><td class="n">—</td><td>Used in gifts and sets</td><td class="n">—</td><td class="n">—</td></tr>'; return; }
+        if(s.base<=0){ t+='<tr><td>'+esc(s.name)+'</td><td class="n">0%</td><td>Fix pricing first, keep out of offers</td><td class="n">'+esc(egp(s.base))+'</td><td class="n">—</td></tr>'; planRows.push([s.name,"Fix pricing first, keep out of offers"]); return; }
+        if(s.safe<10){
+          const gift=addons.length?pickBest(productOffers(s,addons,g).filter(o=>o.id==="gift")):null;
+          const rec="Full price, margin too thin to discount"+(gift&&gift.status==="ok"?". Optional: "+gift.head:"");
+          t+='<tr><td>'+esc(s.name)+'</td><td class="n">'+fl(s.ceil)+'</td><td>'+esc(rec)+'</td><td class="n">'+esc(egp(s.base))+'</td><td class="n">1×</td></tr>';
+          planRows.push([s.name,"Full price · ceiling "+fl(s.ceil)]); return;
+        }
+        const b=leadAndSecond(productOffers(s,addons,g)).lead;
+        t+='<tr><td>'+esc(s.name)+'</td><td class="n">'+fl(s.ceil)+'</td><td>'+esc(b?b.head:"Full price, no offer clears your floor")+'</td><td class="n">'+esc(egp(b?b.profit:s.base))+'</td><td class="n">'+(b&&b.orders?esc(xf(b.orders)):"1×")+'</td></tr>';
+        const inLead=lead&&!(lead.excl||[]).includes(s.name);
+        planRows.push([s.name,(inLead?"In the lead offer":"Own offer: "+(b?b.head:"full price"))+" · ceiling "+fl(s.ceil)]);
+      });
+      $("ptable").innerHTML=t;
+      $("tableBlock").hidden=false;
+      if(lead){rows.push(["Lead offer",lead.head]); if(second) rows.push(["Second offer",second.head]);}
+      else rows.push(["Lead offer","No catalogue offer clears your floor. Run full price, or lower your floor."]);
+      planRows.forEach(r=>rows.push(r));
+      if(out.length) rows.push(["Keep full price",out.map(s=>s.name).join(", ")]);
+    }
+    rows.push(["Timing","One week, ending Black Friday weekend (27–29 Nov)"]);
+    rows.push(["Protect delivery","A confirmation call on every COD order before it ships"]);
+    $("planTitle").textContent=g.brand+" · Black Friday plan";
+    $("planList").innerHTML=rows.map(r=>'<li><span class="k">'+esc(r[0])+'</span><span class="v">'+esc(r[1])+'</span></li>').join("");
+    $("fallback").value=g.brand.toUpperCase()+" · BLACK FRIDAY PLAN\n"+rows.map(r=>r[0]+": "+r[1]).join("\n")+"\n\nBuilt with the Black Friday Offer Calculator by @thatsbelal";
+  }
+
+  $("copyBtn").addEventListener("click",function(){
+    const text=$("fallback").value, btn=this;
+    const done=()=>{btn.textContent="Copied";setTimeout(()=>btn.textContent="Copy plan",1800)};
+    const fail=()=>{const ta=$("fallback");ta.hidden=false;ta.focus();ta.select();btn.textContent="Select and copy below"};
+    try{ navigator.clipboard.writeText(text).then(done,fail); }catch(e){ fail(); }
+  });
+  ["brand","ship","cpa","dr","comp","floor","cpach","drop"].forEach(id=>$(id).addEventListener("input",compute));
+  $("f").addEventListener("submit",e=>e.preventDefault());
+  renderRows(); compute();
+})();
+</script>
+
+</body>
+</html>
